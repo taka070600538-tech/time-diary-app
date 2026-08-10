@@ -3,6 +3,7 @@
 import { loadState } from './store.js';
 import { todayString } from './calc.js';
 import { renderTimeline } from './timeline.js';
+import { renderStats } from './stats.js';
 
 const state = loadState();
 let currentDate = todayString();
@@ -25,7 +26,8 @@ export function rerender() {
       },
     });
   }
-  // stats / items タブは Task 5 / 6 でここに追加する
+  if (activeTab === 'stats') renderStats(containers.stats, { state });
+  // items タブは Task 6 でここに追加する
 }
 
 export function showTab(name) {

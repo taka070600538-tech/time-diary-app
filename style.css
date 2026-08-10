@@ -383,6 +383,64 @@ main[hidden] {
   height: auto;
 }
 
+/* =========================================================
+   分析・グラフ(Task 5)
+   ========================================================= */
+
+.stat-summary {
+  margin: 0 0 10px;
+  font-size: 0.875rem;
+  color: var(--ink);
+}
+
+.chart-wrapper {
+  margin-top: 4px;
+}
+
+.chart-baseline {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.chart-bar {
+  fill: var(--indigo);
+}
+
+.chart-value-label,
+.chart-date-label {
+  font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink-soft);
+}
+
+.chart-value-label {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.chart-date-label {
+  font-size: 10px;
+}
+
+.chart-empty {
+  margin: 8px 0 0;
+  padding: 16px 0;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+
+.empty-message {
+  margin: 24px 0;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+}
+
 .item-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
