@@ -1,0 +1,447 @@
+/*
+  時間管理ダイアリー — スタイル
+  意匠: 和紙 × 藍色。1日の記録を貫く「一本の線(timeline rail)」を signature に、
+  自動計算区間はその線を束ねる生成りの帯として表現する。
+  見出しは明朝、本文・UIはゴシックの書き分け(OS標準フォントのみ・オフライン前提)。
+*/
+
+:root {
+  /* --- 配色トークン --- */
+  --paper: #f6f3ec;
+  --surface: #ffffff;
+  --ink: #292521;
+  --ink-soft: #6b6459;
+  --indigo: #2c4a63;
+  --indigo-deep: #1d3345;
+  --indigo-tint: #e7edf1;
+  --interval-bg: #efe6d8;
+  --interval-text: #5c4a2e;
+  --line: #ddd5c4;
+  --warm: #b3542e;
+  --warm-tint: #f6e6de;
+  --danger: #a83e3e;
+
+  /* --- タイポグラフィ --- */
+  --font-display: 'Shippori Mincho', 'Yu Mincho', YuMincho, 'Hiragino Mincho ProN', serif;
+  --font-body: 'Zen Kaku Gothic New', 'Yu Gothic', YuGothic, 'Hiragino Kaku Gothic ProN',
+    'Noto Sans JP', sans-serif;
+
+  /* --- レイアウト --- */
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+  --gap: 12px;
+  --page-padding: 16px;
+  --transition: 160ms ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: 1rem;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+  border-radius: var(--radius-s);
+}
+
+button {
+  cursor: pointer;
+}
+
+/* =========================================================
+   ヘッダー・タブ
+   ========================================================= */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  padding: var(--page-padding) var(--page-padding) 0;
+}
+
+.app-header h1 {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.375rem;
+  letter-spacing: 0.02em;
+  color: var(--indigo-deep);
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-button {
+  flex: 1 0 auto;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.tab-button:hover {
+  color: var(--indigo);
+}
+
+.tab-button.is-active {
+  color: var(--indigo-deep);
+  border-bottom-color: var(--indigo);
+}
+
+main {
+  display: block;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--page-padding);
+  padding-bottom: 48px;
+}
+
+main[hidden] {
+  display: none;
+}
+
+/* =========================================================
+   日付ナビゲーション
+   ========================================================= */
+
+.date-nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 10px 12px;
+  margin-bottom: var(--gap);
+}
+
+.date-nav-button,
+.date-nav-today {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--indigo-deep);
+  border-radius: var(--radius-s);
+  padding: 8px 10px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.date-nav-button:hover,
+.date-nav-today:hover {
+  background: var(--indigo-tint);
+  border-color: var(--indigo);
+}
+
+.date-nav-today {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: var(--surface);
+  justify-self: center;
+  padding: 6px 18px;
+}
+
+.date-nav-today:hover {
+  background: var(--indigo-deep);
+}
+
+.date-nav-current {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.date-nav-input {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  padding: 4px 6px;
+  font-size: 0.8125rem;
+  max-width: 100%;
+}
+
+.date-heading {
+  font-family: var(--font-display);
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+/* =========================================================
+   タイムライン(signature要素): 一本の線と丸ノードで1日をつなぐ
+   ========================================================= */
+
+.timeline-list {
+  list-style: none;
+  margin: 0 0 var(--gap);
+  padding: 4px 0 4px 22px;
+  position: relative;
+}
+
+.timeline-list::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 22px;
+  bottom: 22px;
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+}
+
+.timeline-row::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--indigo);
+}
+
+.timeline-label {
+  min-width: 0;
+  font-size: 0.875rem;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+
+.timeline-time {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  padding: 6px 8px;
+  font-size: 0.9375rem;
+  width: 7.5em;
+  min-width: 0;
+}
+
+.now-button {
+  appearance: none;
+  border: 1px solid var(--warm);
+  background: var(--warm-tint);
+  color: var(--warm);
+  border-radius: var(--radius-s);
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background var(--transition);
+}
+
+.now-button:hover {
+  background: var(--warm);
+  color: var(--surface);
+}
+
+.interval-row {
+  position: relative;
+  margin: 4px 0 4px 4px;
+  padding: 8px 12px;
+  background: var(--interval-bg);
+  border-radius: var(--radius-s);
+  border-left: 3px solid var(--indigo);
+}
+
+.interval-row::before {
+  content: '';
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  width: 13px;
+  height: 2px;
+  background: var(--line);
+}
+
+.interval-text {
+  display: block;
+  font-size: 0.8125rem;
+  color: var(--interval-text);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* =========================================================
+   特記事項
+   ========================================================= */
+
+.note-area {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.note-label {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.note-textarea {
+  appearance: none;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--surface);
+  padding: 10px 12px;
+  font-size: 0.9375rem;
+  min-height: 5em;
+  width: 100%;
+}
+
+/* =========================================================
+   後続タスクで使う基本クラス(Task 5/6/8)
+   ========================================================= */
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 14px;
+  margin-bottom: var(--gap);
+}
+
+.stat-card h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--indigo-deep);
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  margin-bottom: 6px;
+}
+
+.settings-section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 14px;
+  margin: var(--gap) auto 24px;
+  max-width: 640px;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* =========================================================
+   ボタン共通(危険操作等)
+   ========================================================= */
+
+.button-danger {
+  border: 1px solid var(--danger);
+  background: var(--surface);
+  color: var(--danger);
+  border-radius: var(--radius-s);
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   モバイル最優先 / 小幅対応
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .timeline-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 6px;
+  }
+
+  .timeline-time,
+  .now-button {
+    justify-self: start;
+  }
+}
+
+@media (min-width: 640px) {
+  :root {
+    --page-padding: 24px;
+  }
+}

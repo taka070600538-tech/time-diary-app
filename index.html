@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F6F3EC">
+  <title>時間管理ダイアリー</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="app-header">
+    <h1>時間管理ダイアリー</h1>
+    <nav class="tabs">
+      <button class="tab-button is-active" data-tab="timeline" type="button">タイムライン入力</button>
+      <button class="tab-button" data-tab="stats" type="button">分析・グラフ</button>
+      <button class="tab-button" data-tab="items" type="button">項目の編集</button>
+    </nav>
+  </header>
+  <main id="tab-timeline"></main>
+  <main id="tab-stats" hidden></main>
+  <main id="tab-items" hidden></main>
+  <section id="settings"></section>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
