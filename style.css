@@ -453,13 +453,19 @@ main[hidden] {
   margin-bottom: 6px;
 }
 
+#settings {
+  display: block;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--gap) var(--page-padding) 48px;
+}
+
 .settings-section {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius-m);
   padding: 14px;
-  margin: var(--gap) auto 24px;
-  max-width: 640px;
+  margin: var(--gap) 0 0;
 }
 
 .settings-actions {
@@ -579,14 +585,35 @@ main[hidden] {
    ボタン共通(危険操作等)
    ========================================================= */
 
+.button-primary,
 .button-danger {
-  border: 1px solid var(--danger);
-  background: var(--surface);
-  color: var(--danger);
   border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 0.8125rem;
   font-weight: 600;
+  transition: background var(--transition), color var(--transition);
+}
+
+.button-primary {
+  border: 1px solid var(--indigo);
+  background: var(--indigo);
+  color: var(--surface);
+}
+
+.button-primary:hover {
+  background: var(--indigo-deep);
+  border-color: var(--indigo-deep);
+}
+
+.button-danger {
+  border: 1px solid var(--danger);
+  background: var(--surface);
+  color: var(--danger);
+}
+
+.button-danger:hover {
+  background: var(--danger);
+  color: var(--surface);
 }
 
 /* =========================================================
