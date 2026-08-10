@@ -469,6 +469,113 @@ main[hidden] {
 }
 
 /* =========================================================
+   項目の編集(Task 6)
+   ========================================================= */
+
+.settings-section h2 {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  color: var(--indigo-deep);
+}
+
+.item-label-input {
+  appearance: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  padding: 6px 8px;
+  font-size: 0.9375rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.item-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.icon-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--indigo-deep);
+  border-radius: var(--radius-s);
+  font-size: 0.875rem;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.icon-button:hover {
+  background: var(--indigo-tint);
+  border-color: var(--indigo);
+}
+
+.icon-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.settings-add-button {
+  appearance: none;
+  width: 100%;
+  margin-top: 4px;
+  border: 1px dashed var(--indigo);
+  background: var(--indigo-tint);
+  color: var(--indigo-deep);
+  border-radius: var(--radius-s);
+  padding: 10px 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background var(--transition), color var(--transition);
+}
+
+.settings-add-button:hover {
+  background: var(--indigo);
+  color: var(--surface);
+}
+
+.interval-edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  margin-bottom: 6px;
+}
+
+.interval-edit-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.interval-select {
+  appearance: none;
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  background: var(--surface);
+  padding: 6px 8px;
+  font-size: 0.875rem;
+}
+
+.interval-arrow {
+  flex: 0 0 auto;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+/* =========================================================
    ボタン共通(危険操作等)
    ========================================================= */
 

@@ -4,6 +4,7 @@ import { loadState } from './store.js';
 import { todayString } from './calc.js';
 import { renderTimeline } from './timeline.js';
 import { renderStats } from './stats.js';
+import { renderItems } from './items.js';
 
 const state = loadState();
 let currentDate = todayString();
@@ -27,7 +28,7 @@ export function rerender() {
     });
   }
   if (activeTab === 'stats') renderStats(containers.stats, { state });
-  // items タブは Task 6 でここに追加する
+  if (activeTab === 'items') renderItems(containers.items, { state, onChanged: rerender });
 }
 
 export function showTab(name) {
