@@ -10,26 +10,7 @@ import {
   updateInterval,
   removeInterval,
 } from './store.js';
-
-// 小さなDOM生成ヘルパー(timeline.js/stats.jsと同じ方針)。
-function el(tag, attrs = {}, children = []) {
-  const node = document.createElement(tag);
-  for (const [key, value] of Object.entries(attrs)) {
-    if (value == null) continue;
-    if (key === 'class') node.className = value;
-    else if (key === 'text') node.textContent = value;
-    else if (key.startsWith('on') && typeof value === 'function') {
-      node.addEventListener(key.slice(2), value);
-    } else {
-      node.setAttribute(key, value);
-    }
-  }
-  for (const child of [].concat(children)) {
-    if (child == null) continue;
-    node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
-  }
-  return node;
-}
+import { el } from './dom.js';
 
 function buildItemSelect(items, selectedId, ariaLabel) {
   const select = el('select', { class: 'interval-select', 'aria-label': ariaLabel });

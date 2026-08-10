@@ -48,6 +48,7 @@ export function intervalMinutes(day, interval) {
 
 export function intervalStats(days, interval, today) {
   const recorded = Object.keys(days)
+    .filter((date) => date <= today)
     .map((date) => intervalMinutes(days[date], interval))
     .filter((m) => m != null);
   const avgMinutes = recorded.length

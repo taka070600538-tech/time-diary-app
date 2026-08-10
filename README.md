@@ -31,4 +31,8 @@ https://taka070600538-tech.github.io/time-diary-app/
 npm test
 ```
 
+`js/`や`style.css`等のアセットを変更した場合は、`sw.js`の`CACHE_NAME`
+（例: `time-diary-v1` → `time-diary-v2`）を上げてください。上げないと、
+インストール済み端末が古いキャッシュを掴んだままになります。
+
 設計書・実装計画は `docs/superpowers/` 以下を参照してください。

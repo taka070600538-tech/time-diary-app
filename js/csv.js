@@ -17,11 +17,11 @@ export function generateCsv(state) {
     const day = state.days[date];
     return [
       date,
-      ...state.items.map((i) => day.times[i.id] ?? ''),
+      ...state.items.map((i) => day.times?.[i.id] ?? ''),
       ...state.intervals.map((iv) => intervalMinutes(day, iv) ?? ''),
       day.note ?? '',
     ];
   });
   const lines = [header, ...rows].map((row) => row.map(escapeCell).join(','));
-  return '﻿' + lines.join('\r\n');
+  return '\uFEFF' + lines.join('\r\n');
 }

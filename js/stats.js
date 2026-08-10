@@ -3,22 +3,7 @@
 // innerHTML経由で挿入する(項目ラベル等ユーザー由来の文字列はtextContent経由のみ)。
 
 import { intervalStats, formatDuration, todayString } from './calc.js';
-
-// 小さなDOM生成ヘルパー(timeline.jsと同じ方針)。
-function el(tag, attrs = {}, children = []) {
-  const node = document.createElement(tag);
-  for (const [key, value] of Object.entries(attrs)) {
-    if (value == null) continue;
-    if (key === 'class') node.className = value;
-    else if (key === 'text') node.textContent = value;
-    else node.setAttribute(key, value);
-  }
-  for (const child of [].concat(children)) {
-    if (child == null) continue;
-    node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
-  }
-  return node;
-}
+import { el } from './dom.js';
 
 // 棒グラフ上の短縮ラベル(60分以上は "7.5h"、未満は "45m")。formatDurationとは別表記。
 function barLabel(minutes) {

@@ -79,3 +79,13 @@ test('intervalStats: 記録ゼロなら平均はnull', () => {
   assert.equal(s.avgMinutes, null);
   assert.equal(s.weekTotalMinutes, 0);
 });
+
+test('intervalStats: todayより後の日付は平均に含めない', () => {
+  const interval = { id: 'x', start: 'a', end: 'b' };
+  const days = {
+    '2026-08-09': { times: { a: '10:00', b: '11:00' } }, // 60分、集計対象
+    '2026-08-11': { times: { a: '10:00', b: '13:00' } }, // 180分、todayより後なので除外
+  };
+  const s = intervalStats(days, interval, '2026-08-10');
+  assert.equal(s.avgMinutes, 60);
+});
