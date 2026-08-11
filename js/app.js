@@ -68,15 +68,17 @@ function renderSettings() {
   if (!section) return;
   section.textContent = '';
 
-  // renderSyncSettingsは見出しを含む自己完結したUIを描画するため、
-  // ここでは重複見出しを付けずコンテナだけを用意する。
-  const syncContainer = el('div', { id: 'sync-settings' });
+  // renderBackupControls/renderTokenSettingsは見出しを含む自己完結したUIを
+  // 個別に描画するため、ここでは重複見出しを付けずコンテナだけを用意する
+  // (並び順を①バックアップ→②GitHub連携で固定するため2コンテナに分ける)。
+  const backupContainer = el('div', { id: 'sync-backup-section' });
+  const tokenContainer = el('div', { id: 'sync-token-section' });
 
   const exportButton = el('button', {
     type: 'button',
     id: 'export-data',
     class: 'button-primary',
-    text: 'エクスポート(JSONファイル)',
+    text: 'ファイルにエクスポート',
     onclick: exportData,
   });
 
@@ -101,21 +103,24 @@ function renderSettings() {
     type: 'button',
     id: 'import-data',
     class: 'button-primary',
-    text: 'インポート(JSONファイル)',
+    text: 'ファイルからインポート',
     onclick: () => fileInput.click(),
   });
 
   const dataSection = el('section', { class: 'settings-section' }, [
-    el('h2', { text: 'データ管理' }),
+    el('h2', { text: 'インポート・エクスポート' }),
+    el('p', { class: 'settings-note', text: 'アプリのデータをJSONファイルに書き出したり、ファイルから取り込んだりできます。' }),
     el('div', { class: 'settings-actions' }, [exportButton, importButton, fileInput]),
   ]);
 
-  section.appendChild(syncContainer);
+  section.appendChild(backupContainer);
+  section.appendChild(tokenContainer);
   section.appendChild(dataSection);
 
   // app-sync基盤(GitHubバックアップ共有モジュール)を動的importで読み込む。
-  // オフラインや基盤側の障害でimportが失敗しても、catchで握りつぶし
-  // アプリ本体(タイムライン等)の動作には影響させない。
+  // オフラインや基盤側の障害でimportが失敗しても、initDailyBackup自体は
+  // 静かにスキップされアプリ本体(タイムライン等)の動作には影響させない。
+  // ただし①②のコンテナにはオフラインの案内を表示する。
   import(SYNC_URL)
     .then((sync) => {
       sync.initDailyBackup({
@@ -123,9 +128,14 @@ function renderSettings() {
         collect: async () => state,
         restore: async (data) => saveState(data),
       });
-      sync.renderSyncSettings(syncContainer);
+      sync.renderBackupControls(backupContainer);
+      sync.renderTokenSettings(tokenContainer);
     })
-    .catch(() => {});
+    .catch(() => {
+      const message = 'GitHubバックアップ機能は現在利用できません(オフラインの可能性)。';
+      backupContainer.appendChild(el('p', { class: 'settings-note', text: message }));
+      tokenContainer.appendChild(el('p', { class: 'settings-note', text: message }));
+    });
 }
 
 renderSettings(); // 起動時に1回(設定タブは非依存で常にバックアップ処理を動かす)
