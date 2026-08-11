@@ -1,11 +1,10 @@
 // アプリの起動・タブ制御。各タブの描画は個別モジュールに委譲する。
 
-import { loadState, saveState, resetState } from './store.js';
+import { loadState, saveState, parseBackupJson } from './store.js';
 import { todayString } from './calc.js';
 import { renderTimeline } from './timeline.js';
 import { renderStats } from './stats.js';
 import { renderItems } from './items.js';
-import { generateCsv } from './csv.js';
 import { el } from './dom.js';
 
 // 共有GitHub自動バックアップ基盤(app-sync)。オフライン・基盤障害時は
@@ -20,6 +19,7 @@ const containers = {
   timeline: document.getElementById('tab-timeline'),
   stats: document.getElementById('tab-stats'),
   items: document.getElementById('tab-items'),
+  settings: document.getElementById('tab-settings'),
 };
 
 export function rerender() {
@@ -35,6 +35,7 @@ export function rerender() {
   }
   if (activeTab === 'stats') renderStats(containers.stats, { state });
   if (activeTab === 'items') renderItems(containers.items, { state, onChanged: rerender });
+  // settingsは静的UIのため起動時に1回だけ描画する(renderSettings参照)。
 }
 
 export function showTab(name) {
@@ -51,11 +52,11 @@ document.querySelectorAll('.tab-button').forEach((b) => {
   b.addEventListener('click', () => showTab(b.dataset.tab));
 });
 
-function downloadCsv() {
-  const blob = new Blob([generateCsv(state)], { type: 'text/csv' });
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `time-diary-${todayString()}.csv`;
+  a.download = `time-diary-backup-${todayString()}.json`;
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -63,7 +64,7 @@ function downloadCsv() {
 }
 
 function renderSettings() {
-  const section = document.getElementById('settings');
+  const section = containers.settings;
   if (!section) return;
   section.textContent = '';
 
@@ -71,30 +72,42 @@ function renderSettings() {
   // ここでは重複見出しを付けずコンテナだけを用意する。
   const syncContainer = el('div', { id: 'sync-settings' });
 
-  const csvButton = el('button', {
+  const exportButton = el('button', {
     type: 'button',
-    id: 'csv-download',
+    id: 'export-data',
     class: 'button-primary',
-    text: 'CSV形式でダウンロード',
-    onclick: downloadCsv,
+    text: 'エクスポート(JSONファイル)',
+    onclick: exportData,
   });
 
-  const resetButton = el('button', {
+  const fileInput = el('input', { type: 'file', accept: '.json,application/json', hidden: '' });
+  fileInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    const text = await file.text();
+    const parsed = parseBackupJson(text);
+    if (!parsed) {
+      alert('ファイルの形式が正しくありません。時間管理ダイアリーのエクスポートファイルを選択してください。');
+      return;
+    }
+    const ok = confirm('現在のすべてのデータをインポートした内容で上書きします。よろしいですか?');
+    if (!ok) return;
+    saveState(parsed);
+    location.reload();
+  });
+
+  const importButton = el('button', {
     type: 'button',
-    id: 'reset-all',
-    class: 'button-danger',
-    text: '全データを初期化',
-    onclick: () => {
-      const ok = confirm('すべての記録と項目設定を削除し、初期状態に戻します。よろしいですか?');
-      if (!ok) return;
-      resetState();
-      location.reload();
-    },
+    id: 'import-data',
+    class: 'button-primary',
+    text: 'インポート(JSONファイル)',
+    onclick: () => fileInput.click(),
   });
 
   const dataSection = el('section', { class: 'settings-section' }, [
     el('h2', { text: 'データ管理' }),
-    el('div', { class: 'settings-actions' }, [csvButton, resetButton]),
+    el('div', { class: 'settings-actions' }, [exportButton, importButton, fileInput]),
   ]);
 
   section.appendChild(syncContainer);
@@ -115,5 +128,5 @@ function renderSettings() {
     .catch(() => {});
 }
 
-renderSettings(); // 起動時に1回(設定エリアはタブ非依存で常に表示)
+renderSettings(); // 起動時に1回(設定タブは非依存で常にバックアップ処理を動かす)
 rerender();

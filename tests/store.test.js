@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   DEFAULT_ITEMS, DEFAULT_INTERVALS, defaultState, loadState, saveState,
   getDay, setTime, setNote, addItem, renameItem, moveItem, removeItem,
-  addInterval, updateInterval, removeInterval, resetState,
+  addInterval, updateInterval, removeInterval, resetState, parseBackupJson,
 } from '../js/store.js';
 
 function memoryStorage() {
@@ -108,4 +108,26 @@ test('removeInterval / resetState', () => {
   const fresh = resetState(storage);
   assert.equal(fresh.intervals.length, 4);
   assert.equal(loadState(storage).intervals.length, 4);
+});
+
+test('parseBackupJson: 正常なstate JSONを復元する', () => {
+  const source = defaultState();
+  source.days['2026-08-10'] = { times: { wake: '06:30' }, note: 'メモ' };
+  const parsed = parseBackupJson(JSON.stringify(source));
+  assert.notEqual(parsed, null);
+  assert.equal(parsed.items.length, source.items.length);
+  assert.equal(parsed.intervals.length, source.intervals.length);
+  assert.equal(parsed.days['2026-08-10'].times.wake, '06:30');
+});
+
+test('parseBackupJson: daysキーが無ければ{}を補完する', () => {
+  const source = { items: DEFAULT_ITEMS, intervals: DEFAULT_INTERVALS };
+  const parsed = parseBackupJson(JSON.stringify(source));
+  assert.deepEqual(parsed.days, {});
+});
+
+test('parseBackupJson: 不正な入力はnullを返す', () => {
+  assert.equal(parseBackupJson(JSON.stringify({ items: 'not-array', intervals: [] })), null);
+  assert.equal(parseBackupJson('{broken'), null);
+  assert.equal(parseBackupJson('null'), null);
 });

@@ -453,13 +453,6 @@ main[hidden] {
   margin-bottom: 6px;
 }
 
-#settings {
-  display: block;
-  max-width: 640px;
-  margin: 0 auto;
-  padding: var(--gap) var(--page-padding) 48px;
-}
-
 .settings-section {
   background: var(--surface);
   border: 1px solid var(--line);

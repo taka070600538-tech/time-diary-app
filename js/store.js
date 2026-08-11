@@ -135,3 +135,16 @@ export function resetState(storage) {
   saveState(state, storage);
   return state;
 }
+
+// エクスポートファイル(JSON文字列)を検証してstateとして返す。不正ならnull。
+export function parseBackupJson(text) {
+  try {
+    const state = JSON.parse(text);
+    if (!state || typeof state !== 'object') return null;
+    if (!Array.isArray(state.items) || !Array.isArray(state.intervals)) return null;
+    state.days ??= {};
+    return state;
+  } catch {
+    return null;
+  }
+}

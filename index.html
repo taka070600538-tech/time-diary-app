@@ -16,12 +16,13 @@
       <button class="tab-button is-active" data-tab="timeline" type="button">タイムライン入力</button>
       <button class="tab-button" data-tab="stats" type="button">分析・グラフ</button>
       <button class="tab-button" data-tab="items" type="button">項目の編集</button>
+      <button class="tab-button" data-tab="settings" type="button">設定</button>
     </nav>
   </header>
   <main id="tab-timeline"></main>
   <main id="tab-stats" hidden></main>
   <main id="tab-items" hidden></main>
-  <section id="settings"></section>
+  <main id="tab-settings" hidden></main>
   <script type="module" src="js/app.js"></script>
   <script>
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');

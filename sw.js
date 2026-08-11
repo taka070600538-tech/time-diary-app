@@ -1,4 +1,4 @@
-const CACHE_NAME = 'time-diary-v2';
+const CACHE_NAME = 'time-diary-v3';
 const ASSETS = [
   './', './index.html', './style.css', './manifest.json',
   './js/app.js', './js/calc.js', './js/store.js', './js/csv.js',
