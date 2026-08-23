@@ -84,7 +84,7 @@ test('runTranscription: 新規作成・冪等な再実行・内容変更時の�
     // 1回目: 新規作成
     let results = runTranscription({ state, diaryDir: dir, today: '2026-08-10' });
     assert.deepEqual(results, [{ date: '2026-08-09', action: 'created' }]);
-    const path = join(dir, '2026-08-09.md');
+    const path = join(dir, 'スマホ - 2026-08-09.md');
     assert.ok(existsSync(path));
     const firstContent = readFileSync(path, 'utf8');
 

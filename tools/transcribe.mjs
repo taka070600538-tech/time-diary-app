@@ -9,7 +9,7 @@ import { intervalMinutes, formatDuration, todayString } from '../js/calc.js';
 const START = '<!-- time-diary:start -->';
 const END = '<!-- time-diary:end -->';
 const DEFAULT_BACKUP = String.raw`D:\Obsidian Vault for Claude Code\Git\app-data\time-diary\backup.json`;
-const DEFAULT_DIARY_DIR = String.raw`D:\Obsidian Vault for Claude Code\01_日記`;
+const DEFAULT_DIARY_DIR = String.raw`D:\Obsidian Vault for Claude Code\01_油田`;
 
 export function buildDaySection(state, date) {
   const day = state.days[date];
@@ -55,7 +55,7 @@ export function runTranscription({ state, diaryDir, today }) {
   for (const date of datesToTranscribe(state, today)) {
     const section = buildDaySection(state, date);
     if (!section) continue;
-    const path = join(diaryDir, `${date}.md`);
+    const path = join(diaryDir, `スマホ - ${date}.md`);
     try {
       const existing = existsSync(path) ? readFileSync(path, 'utf8') : '';
       const next = upsertSection(existing, section);
