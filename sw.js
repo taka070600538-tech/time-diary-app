@@ -1,4 +1,4 @@
-const CACHE_NAME = 'time-diary-v3';
+const CACHE_NAME = 'time-diary-v4';
 const ASSETS = [
   './', './index.html', './style.css', './manifest.json',
   './js/app.js', './js/calc.js', './js/store.js', './js/csv.js',
@@ -8,7 +8,13 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+  // GitHub Pagesはmax-age=600で配信するため、通常のfetchだとブラウザのHTTPキャッシュに残った
+  // 古いJSを新しいCACHE_NAMEのキャッシュに取り込んでしまう。cache:'reload'で必ずサーバーから取得する。
+  e.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((c) => c.addAll(ASSETS.map((url) => new Request(url, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', (e) => {

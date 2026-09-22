@@ -39,3 +39,9 @@ test('sw.jsのASSETSに主要ファイルが含まれ、実在する', () => {
 test('sw.jsはapp-syncのsync.jsをキャッシュしない', () => {
   assert.ok(!sw.includes('app-sync'));
 });
+
+test('sw.js: プリキャッシュ取得はHTTPキャッシュを迂回する(cache: reload)', () => {
+  // GitHub Pagesはmax-age=600で配信するため、通常のfetchだとCACHE_NAMEを上げても
+  // ブラウザのHTTPキャッシュから古いJSを取り込んでしまうことがある。
+  assert.match(sw, /cache:\s*['"]reload['"]/);
+});
