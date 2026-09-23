@@ -21,7 +21,7 @@ https://taka070600538-tech.github.io/time-diary-app/
 1. 入力内容はブラウザのlocalStorageに即時保存
 2. アプリを開いたとき、1日1回`app-data/time-diary/backup.json`へ自動バックアップ（手動保存ボタンもあり）
 3. PC側では毎日の自動pullタスクが`app-data`を取得し、前日以前の記録をObsidianのデイリーノート
-   （`01_原油/スマホ - YYYY-MM-DD.md`。2026-08-23までは `YYYY-MM-DD.md` 本体）へ自動転記
+   （`01-NOTE/スマホ - YYYY-MM-DD.md`。2026-08-23までは `YYYY-MM-DD.md` 本体）へ自動転記
 
 ## 開発
 

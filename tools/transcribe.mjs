@@ -9,7 +9,7 @@ import { intervalMinutes, formatDuration, todayString } from '../js/calc.js';
 const START = '<!-- time-diary:start -->';
 const END = '<!-- time-diary:end -->';
 const DEFAULT_BACKUP = String.raw`D:\Obsidian Vault for Claude Code\Git\app-data\time-diary\backup.json`;
-const DEFAULT_DIARY_DIR = String.raw`D:\Obsidian Vault for Claude Code\01_原油`;
+const DEFAULT_DIARY_DIR = String.raw`D:\Obsidian Vault for Claude Code\01-NOTE`;
 
 export function buildDaySection(state, date) {
   const day = state.days[date];
