@@ -1,4 +1,6 @@
-const CACHE_NAME = 'time-diary-v4';
+const CACHE_NAME = 'time-diary-v5';
+// Cache Storage は同じオリジンの他の PWA と共有なので、片付けは自分の接頭辞の箱だけにする
+const CACHE_PREFIX = CACHE_NAME.replace(/v\d+$/, '');
 const ASSETS = [
   './', './index.html', './style.css', './manifest.json',
   './js/app.js', './js/calc.js', './js/store.js', './js/csv.js',
@@ -20,7 +22,7 @@ self.addEventListener('install', (e) => {
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith(CACHE_PREFIX) && k !== CACHE_NAME).map((k) => caches.delete(k))))
       .then(() => self.clients.claim()),
   );
 });
